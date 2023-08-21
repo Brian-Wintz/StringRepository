@@ -1,25 +1,40 @@
-# Employee App
+# String Repository
 
-The initial purpose of this project is to understand how to manage persistence of a POJO (plain old java object) using a MariaDB database. The objectives are as follows:
-* Provide a generic mechanism that provides for create/read/update/delete (crud) management of a database record for a POJO
+This web application is intended to serve as a tool for managing translatable strings used in applications which are used globally across different languages.  In using these translatable strings within an application a string code, along with an ISO language and country codes is used to determine the translated string to be presented to the user in their language.  Typically, these strings will have placeholders for values that are supplied at runtime, such as "Hello John", where "John" is a value provided at runtime. To accomodate this, the value to be replaced at runtime is specified as "%#", where "%1" represents the first replaceable value, "%2" the second and so on.  Below is a screenshot showing various translations of a HELLO text into multiple languages:
+
+![image](https://github.com/Brian-Wintz/StringRepository/assets/133924124/34cd8c6d-7772-41fd-b8aa-6328f81648d1)
+
+In implementing this solution I adopted the minimal set of components to create this web application as specified below:
+
+* Maria DB: database for storing the translated string records (encoded as UTF-8)
+* Apache Tomcat: serves as both the web server for providing static content, as well as a servlet container for exposing REST APIs using a servlet
+* GSON: used to map the TranslatedString java object from it's JSON representation
+* JQuery: used to make the REST API calls using ajax, as well as dynamically manipulating the HTML
+* Java: implementation language for the backend
+* JavaScript: implementation language for the web frontend
+
+In developing this tool there were some interesting coding challenges addressed:
+* Using a generic mechanism that provides for create/read/update/delete (crud) management of a database record for a POJO
 * Identify what information needs to be configured by the POJO to allow this generic crud management to work
-* Document the generic framework
+* Managing multi-byte unicode text between web front end and backend
+* Efficiently managing a pool of database connections to allow for multiple concurrent users
+* Managing HTML table content using JQuery
+* Implementing REST APIs using a Java servlet
+* Implementing calls from web application using JQuery
+* Mapping data between Java objects and JSON
 
-For this example, a simple Employee POJO is used that contains the following fields:
-  String FirstName - required first name of employee
-  String LastName - required last name of employee
-  Integer EmployeeID - required/key for identifying employee record
-  String Employer - required employer name for this employee
-  String Address - employee's address (not required)
-  String City - employee's city (not required)
-  String State - employee's state (not required)
-  Date StartDate - date on which employee started (not required)
-  String MobilePhone - employee's mobile phone number (not required)
-  String PostalCode - employee's postal code (not required)
+For this example, a simple TranslatedString POJO is used that contains the following fields:
 
-This Employee class contains the expected getters and setters for each ot these fields, such as getLastName and setLastName.  In order to provide a generic access mechanism, this Employee class extends a GenericBean class.  This Generic Bean class holds each of the field's values in an internal HashMap instance which is keyed off of a Field enumeration defined in the Employee class.  This Field enumeration implements an IGenericField interface which specifies methods for retrieving information about a specific enumeration value, such as it's associated table field name, it's data type and whether it is a key field.  This enumeration and its's interface are critical to providing a generic crud implementation. Below is a diagram showing the relationships between these classes and interfaces:
-![image](https://github.com/Brian-Wintz/employee_app/assets/133924124/f75eb77d-b3eb-4706-be99-435af5b1b012)
-From this diagram the Employee POJO extends the GenericBean class and overrides the required getTableName and getName methods, as well as providing the crucial Field enumerator that implements the IGenericField interface.  The GenericBean parent class provides a way to access the Employee data generically utilizing the IGenericField interface as the key values into its internal HashMap.  The GenericBean class also defines the DataType enumeration that implements the IGenericDataType interface for extracting String representation of the data type.
-Now that the Employee POJO is defined the next step is to define a GenericDataAccess class that makes use of the configuration information available in the Employee POJO to manage the crud operations.  For the purposes of this example, the necessary URL, user and password required for connecting to the MariaDB database are hard coded into the solution.  Normally these values would be externally configured.  An important aspect of this GenericDataAccess class is that it knows nothing about the Employee POJO that it is managing but works with the generic GenericBean and IGenericField class and interface to manage the persistence.  Below is a diagram showing the interaction of this GenericDataAccessClass and the Employee POJO:
-![image](https://github.com/Brian-Wintz/employee_app/assets/133924124/64f9d89b-bb78-48e5-ba2f-707bfe0ca30f)
-The main methods in the GenericDataAccess class are the create, read, update and delete methods which take a GenericBean instance, which is the generic representation of the Employee instance, and an array of IGenericField instances.  The IGenericField array is extracted from the Field enumeration by using the built in enum values() method.  Since this Field enum implements the IGenericField interface the resulting array can be treated as a collection of IGenericField instances.  In addition to the crud methods, the GenericDataAccess also has protected getKeyWhere and getStringValue methods that are used within the implementation to build the required SQL queries for managing the crud functionality.
+  String StringCode - unique value used to identify which text is to be translated
+  String LanguageCode - ISO language code used to specify which language the text is translated for
+  String CountryCode - ISO country code to further refine the language to a specific country.  For example, Spanish is different in Spain (ES) than it is in Mexico (MX).
+  String RegionCode - Not generally used, but there could be cases where a translation could be further refined by a country's region, such as Texas (tx) within the US.
+  String Text - the translated text for the specified StringCode, LanguageCode, CountryCode and RegionCode
+  String Ticket - a ticket under which the original (English) translated string was created
+  
+Although this implementation is sufficient for managing these translated strings, there is opportunity for additional development to improve this tool:
+
+* Need to implement error handling
+* Implement data validations, such as ensuring ISO language and country codes are valid and verifying that the ticket is available and in a proper state for creating or updating the record
+* Incorporate use of drop down boxes for specifying ISO language and country codes
+* Add more filtering, such as only displaying records for a specific ISO language
