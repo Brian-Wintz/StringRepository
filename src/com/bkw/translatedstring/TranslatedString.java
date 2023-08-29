@@ -24,7 +24,7 @@ public class TranslatedString extends GenericBean<IGenericField, Object> {
         TEXT("Text",GenericBean.DataType.STRING),
         LANGUAGECODE("LanguageCode",GenericBean.DataType.STRING,true),
         COUNTRYCODE("CountryCode",GenericBean.DataType.STRING,true),
-        REGIONCODE("RegionCode",GenericBean.DataType.STRING),
+        REGIONCODE("RegionCode",GenericBean.DataType.STRING,true),
         TICKET("Ticket",GenericBean.DataType.STRING);
 
         private String fieldName;
@@ -73,11 +73,12 @@ public class TranslatedString extends GenericBean<IGenericField, Object> {
         super();
     }
 
-    public TranslatedString(String stringCode,String languageCode,String countryCode) {
+    public TranslatedString(String stringCode,String languageCode,String countryCode,String regionCode) {
         super();
         map.put(Field.STRINGCODE,stringCode);
         map.put(Field.LANGUAGECODE,languageCode);
         map.put(Field.COUNTRYCODE,countryCode);
+        map.put(Field.COUNTRYCODE,regionCode);
     }
     @Override
     public String getTableName() {
@@ -203,7 +204,7 @@ public class TranslatedString extends GenericBean<IGenericField, Object> {
         System.out.println("All:"+list);
 
         // Read existing employee
-        ts=new TranslatedString("SALES_ORDER","en","US");
+        ts=new TranslatedString("SALES_ORDER","en","US","");
         ts=(TranslatedString)GenericDataAccess.read(ts,TranslatedString.Field.values());
         System.out.println("Read: "+ts);
         System.out.println("JSON:\n"+ts.toJSONString());
