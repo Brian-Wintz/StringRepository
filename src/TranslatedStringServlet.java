@@ -32,8 +32,9 @@ public class TranslatedStringServlet extends HttpServlet {
         String stringCode=parameterMap.get("stringCode")[0];
         String languageCode=parameterMap.get("languageCode")[0];
         String countryCode=parameterMap.get("countryCode")[0];
+        String regionCode=parameterMap.get("regionyCode")[0];
 
-        TranslatedString ts=new TranslatedString(stringCode, languageCode, countryCode);
+        TranslatedString ts=new TranslatedString(stringCode, languageCode, countryCode,regionCode);
 
         GenericDataAccess.delete(ts,TranslatedString.Field.values());
     }
@@ -132,7 +133,14 @@ System.out.println("##TS:"+ts);
             if(vals!=null && vals.length>0) {
                 countryCode=vals[0];
             }
-            TranslatedString ts=new TranslatedString(stringCode,languageCode,countryCode);
+
+            vals=parameterMap.get("regopmCode");
+            String regionCode="";
+            if(vals!=null && vals.length>0) {
+                regionCode=vals[0];
+            }
+
+            TranslatedString ts=new TranslatedString(stringCode,languageCode,countryCode,regionCode);
             GenericDataAccess.delete(ts,TranslatedString.Field.values());
 
             String json="{ \"TranslatedStrings\": []}";
