@@ -2,7 +2,8 @@
 
 This web application is intended to serve as a tool for managing translatable strings used in applications which are used globally across different languages.  In using these translatable strings within an application a string code, along with an ISO language and country codes is used to determine the translated string to be presented to the user in their language.  Typically, these strings will have placeholders for values that are supplied at runtime, such as "Hello John", where "John" is a value provided at runtime. To accomodate this, the value to be replaced at runtime is specified as "%#", where "%1" represents the first replaceable value, "%2" the second and so on.  Below is a screenshot showing various translations of a HELLO text into multiple languages:
 
-![image](https://github.com/Brian-Wintz/StringRepository/assets/133924124/34cd8c6d-7772-41fd-b8aa-6328f81648d1)
+![image](https://github.com/Brian-Wintz/StringRepository/assets/133924124/d39df995-22a0-4728-ba99-f6740baa415a)
+
 
 In implementing this solution I adopted the minimal set of components to create this web application as specified below:
 
