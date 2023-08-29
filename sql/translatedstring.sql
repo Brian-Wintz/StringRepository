@@ -17,19 +17,14 @@
 CREATE DATABASE IF NOT EXISTS `sampledb` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
 USE `sampledb`;
 
--- Dumping structure for table sampledb.employees
-CREATE TABLE IF NOT EXISTS `employees` (
-  `FirstName` varchar(50) NOT NULL,
-  `LastName` varchar(50) NOT NULL,
-  `Employer` varchar(50) NOT NULL,
-  `StartDate` date DEFAULT curdate(),
-  `EmployeeID` int(11) NOT NULL,
-  `MobilePhone` varchar(50) DEFAULT '',
-  `Address` varchar(50) DEFAULT '',
-  `City` varchar(50) DEFAULT 'Santa Barbara',
-  `PostalCode` varchar(50) DEFAULT '93111',
-  `State` char(2) DEFAULT 'CA',
-  KEY `Index 1` (`EmployeeID`)
+-- Dumping structure for table sampledb.translatedstring
+CREATE TABLE IF NOT EXISTS `translatedstring` (
+  `StringCode` varchar(50) NOT NULL,
+  `Text` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `LanguageCode` varchar(3) NOT NULL,
+  `CountryCode` varchar(3) NOT NULL DEFAULT '',
+  `RegionCode` varchar(3) DEFAULT '',
+  `Ticket` varchar(24) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Data exporting was unselected.
